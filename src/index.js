@@ -29,6 +29,19 @@ app.get('/tasks/:id', (req, res) => {
 // Create task
 app.post('/tasks', (req, res) => {
   const { title, description, assignee } = req.body;
+
+  if (!title || typeof title !== 'string' || title.trim() === '') {
+    return res.status(400).json({ error: 'Title is required and must be a non-empty string' });
+  }
+
+  if (description !== undefined && typeof description !== 'string') {
+    return res.status(400).json({ error: 'Description must be a string' });
+  }
+
+  if (assignee !== undefined && typeof assignee !== 'string') {
+    return res.status(400).json({ error: 'Assignee must be a string' });
+  }
+
   const task = {
     id: randomUUID(),
     title,
@@ -65,6 +78,9 @@ app.delete('/tasks/:id', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`TaskFlow API running on port ${PORT}`));
+
+if (require.main === module) {
+  app.listen(PORT, () => console.log(`TaskFlow API running on port ${PORT}`));
+}
 
 module.exports = app;
