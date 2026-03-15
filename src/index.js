@@ -1,8 +1,10 @@
 const express = require('express');
 const { randomUUID } = require('crypto');
+const requestLogger = require('./middleware/requestLogger');
 
 const app = express();
 app.use(express.json());
+app.use(requestLogger);
 
 // In-memory store
 const tasks = new Map();
